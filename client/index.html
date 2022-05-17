@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Flexmonster Pivot Table & Charts</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://cdn.flexmonster.com/flexmonster.js"></script>
+</head>
+
+<body>
+    <div id="pivot"></div>
+    <script type="text/javascript">
+
+    const api ="http://localhost:5000/";
+    const getData = async () =>{
+    let data = await fetch(api);
+    let res = await data.json();
+
+    new Flexmonster({
+			container: "#pivot",
+			componentFolder: "https://cdn.flexmonster.com/",
+            toolbar:true,
+			report: {
+                 dataSource: {
+                         /* URL to the Data Compressor Node.js */
+                        // filename: "http://localhost:5000/",
+                        data:res.recordset
+                    },
+                    
+                    slice: {
+                    columns: [{
+                        uniqueName: "MacroBrickName"
+                    }, {
+                        uniqueName: "[TerritoryCode]"
+                    }],
+                    rows: [{
+                        uniqueName: "EmployeeName"
+                    }],
+                    measures: [{
+                        "uniqueName": "PackCode",
+                        "aggregation": "sum"
+                    }]
+                    },      
+			},
+
+		})
+
+}
+ 
+getData()
+        
+	</script>
+</body>
+
+</html>
