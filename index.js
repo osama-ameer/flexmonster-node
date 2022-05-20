@@ -5,6 +5,7 @@ const cors = require('cors')
 
 
 app.use(cors())
+app.use(express.json())
 app.get('/', function (req, res) {
    
     var sql = require("mssql");
@@ -23,14 +24,14 @@ app.get('/', function (req, res) {
     // connect to your database
     sql.connect(config, function (err) {
     
-        if (err) console.log(err);
+        if (err) console.log(err.message);
 
         // create Request object
-        
+        var querySql = ' select salesample.TeamName,  salesample.ProductName, null as M1,  mappingdata.BrickName_Major_Brick, mappingdata.BrickCode_MinorBrick from salesample right outer join mappingdata on salesample.BrickCode=mappingdata.BrickCode_MinorBrick UNION ALL select TeamName, ProductName,  M1 ,null as BrickName_Major_Brick, null as BrickCode_MinorBrick from jo  '
         var request = new sql.Request();
            
         // query to the database and get the records
-        request.query('select * from jo', function (err, names) {
+        request.query( querySql , function (err, names) {
             
             if (err) console.log(err)
 
@@ -40,10 +41,14 @@ app.get('/', function (req, res) {
             // stream.on('data', data => res.write(data));
             // stream.on('end', () => res.end());
             res.send(names);
+            // console.log(result)
             
             
         });
     });
+
+
+
 });
 
 
@@ -62,6 +67,6 @@ app.get('/csv', (req, res) => {
 })
 
 var server = app.listen(5000, function () {
-    console.log('Server is running..');
+    console.log('Server is running.. 5000');
 });
 

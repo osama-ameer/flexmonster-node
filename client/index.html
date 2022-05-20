@@ -16,6 +16,7 @@
     const getData = async () =>{
     let data = await fetch(api);
     let res = await data.json();
+    console.log(res);
 
     new Flexmonster({
 			container: "#pivot",
